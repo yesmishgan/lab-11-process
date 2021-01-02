@@ -10,11 +10,16 @@
 namespace po = boost::program_options;
 namespace bp = boost::process;
 
+bp::child hello(){
+  std::cout << "d";
+  return bp::child(0);
+}
+
 int main(int argc, char *argv[]) {
   Builder build;
   if (build.initBuild(argc, argv)){
     return EXIT_SUCCESS;
   }
-
+  bp::child c = hello();
   return 0;
 }
