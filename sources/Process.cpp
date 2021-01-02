@@ -1,5 +1,3 @@
-//
-// Created by Misha Dolbnin on 01.01.2021.
-//
+// Copyright 2020 Your Name dolbnin@protonmail.com
 
 #include "Process.hpp"

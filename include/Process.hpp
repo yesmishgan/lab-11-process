@@ -1,10 +1,13 @@
-//
-// Created by Misha Dolbnin on 01.01.2021.
-//
+// Copyright 2020 Your Name dolbnin@protonmail.com
 
-#ifndef TEMPLATE_PROCESS_HPP
-#define TEMPLATE_PROCESS_HPP
+#ifndef INCLUDE_PROCESS_HPP_
+#define INCLUDE_PROCESS_HPP_
 
-class Process {};
+class Process {
+ public:
 
-#endif  // TEMPLATE_PROCESS_HPP
+ private:
+
+};
+
+#endif  // INCLUDE_PROCESS_HPP_
