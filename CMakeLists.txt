@@ -30,8 +30,8 @@ find_package(GTest CONFIG REQUIRED)
 hunter_add_package(Async++)
 find_package(Async++ CONFIG REQUIRED)
 
-hunter_add_package(Boost COMPONENTS program_options)
-find_package(Boost CONFIG REQUIRED program_options)
+hunter_add_package(Boost COMPONENTS thread filesystem log program_options)
+find_package(Boost CONFIG REQUIRED thread filesystem log program_options)
 
 hunter_add_package(BoostProcess)
 find_package(BoostProcess CONFIG REQUIRED)
@@ -40,8 +40,8 @@ find_package(BoostProcess CONFIG REQUIRED)
 add_library(template STATIC
   # enum your files and delete this comment
   ${CMAKE_CURRENT_SOURCE_DIR}/
-        sources/Process.cpp
-        include/Process.hpp
+        sources/Builder.cpp
+        include/Builder.hpp
         sources/main.cpp)
 
 add_executable(tests
@@ -51,6 +51,8 @@ add_executable(tests
 
 add_executable(builder
         ${CMAKE_CURRENT_SOURCE_DIR}/sources/main.cpp
+        sources/Builder.cpp
+        include/Builder.hpp
         )
 
 # TODO: change template word to project name and delete this comment
@@ -66,11 +68,27 @@ target_include_directories(builder
         PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
         )
 # TODO: change template word to project name and delete this comment
-target_link_libraries(tests GTest::gtest_main template)
+target_link_libraries(tests
+        Boost::thread
+        Boost::log
+        Boost::filesystem
+        GTest::gtest_main
+        template)
 target_link_libraries(builder
         Boost::program_options
         Async++::Async++
         BoostProcess::boost_process
+        Boost::thread
+        Boost::log
+        Boost::filesystem
+        )
+target_link_libraries(template
+        Boost::program_options
+        Async++::Async++
+        BoostProcess::boost_process
+        Boost::thread
+        Boost::log
+        Boost::filesystem
         )
 
 enable_testing()
