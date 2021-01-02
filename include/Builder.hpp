@@ -13,8 +13,8 @@
 
 namespace po = boost::program_options;
 
-const std::string buildDir = "_builds";
-const std::string installDir = "_install";
+const char buildDir[] = "_builds";
+const char installDir[] = "_install";
 
 class Builder {
  public:
