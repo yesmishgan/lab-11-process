@@ -3,11 +3,6 @@
 #ifndef INCLUDE_PROCESS_HPP_
 #define INCLUDE_PROCESS_HPP_
 
-class Process {
- public:
-
- private:
-
-};
+class Process {};
 
 #endif  // INCLUDE_PROCESS_HPP_
