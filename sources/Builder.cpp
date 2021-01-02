@@ -34,6 +34,6 @@ int Builder::initBuild(int argc, char **argv) {
     isPack = 1;
   }
 
-  std::cout << "OK";
+  //std::cout << "OK";
   return 0;
 }

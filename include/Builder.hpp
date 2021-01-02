@@ -1,7 +1,7 @@
 // Copyright 2020 Your Name dolbnin@protonmail.com
 
-#ifndef INCLUDE_PROCESS_HPP_
-#define INCLUDE_PROCESS_HPP_
+#ifndef INCLUDE_BUILDER_HPP_
+#define INCLUDE_BUILDER_HPP_
 
 #include <async++.h>
 #include <boost/process.hpp>
@@ -13,6 +13,9 @@
 
 namespace po = boost::program_options;
 
+const std::string buildDir = "_builds";
+const std::string installDir = "_install";
+
 class Builder {
  public:
   int initBuild(int argc, char **argv);
@@ -23,4 +26,4 @@ class Builder {
   bool buildConfig = 0;
 };
 
-#endif  // INCLUDE_PROCESS_HPP_
+#endif  // INCLUDE_BUILDER_HPP_
