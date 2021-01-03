@@ -1,11 +1,7 @@
 // Copyright 2020 Your Name dolbnin@protonmail.com
-
+/*
 #include <async++.h>
-#include <boost/process.hpp>
-#include <boost/program_options.hpp>
-#include <boost/process/child.hpp>
 #include <iostream>
-#include <boost/filesystem.hpp>
 #include <Builder.hpp>
 
 namespace po = boost::program_options;
@@ -19,4 +15,21 @@ int main(int argc, char *argv[]) {
   build.startBuild();
   std::cout << "TEST OUT";
   return 0;
+}*/
+
+#include <boost/process.hpp>
+
+using namespace boost::process;
+
+int main()
+{
+  ipstream pipe_stream;
+  child c("gcc --version", std_out > pipe_stream);
+
+  std::string line;
+
+  while (pipe_stream && std::getline(pipe_stream, line) && !line.empty())
+    std::cerr << line << std::endl;
+
+  c.wait();
 }

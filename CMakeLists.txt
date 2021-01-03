@@ -69,22 +69,24 @@ target_include_directories(builder
         )
 # TODO: change template word to project name and delete this comment
 target_link_libraries(tests
+        Async++::Async++
+        Boost::program_options
+        BoostProcess::boost_process
         Boost::thread
         Boost::log
         Boost::filesystem
-        GTest::gtest_main
         template)
 target_link_libraries(builder
-        Boost::program_options
         Async++::Async++
+        Boost::program_options
         BoostProcess::boost_process
         Boost::thread
         Boost::log
         Boost::filesystem
         )
 target_link_libraries(template
-        Boost::program_options
         Async++::Async++
+        Boost::program_options
         BoostProcess::boost_process
         Boost::thread
         Boost::log

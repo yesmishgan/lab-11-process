@@ -4,9 +4,9 @@
 #define INCLUDE_BUILDER_HPP_
 
 #include <async++.h>
-#include <boost/process.hpp>
 #include <boost/program_options.hpp>
 #include <ctime>
+#include <list>
 #include <string>
 #include <iostream>
 #include <boost/log/core.hpp>
@@ -17,6 +17,7 @@
 #include <boost/log/utility/setup/common_attributes.hpp>
 #include <boost/log/utility/setup/console.hpp>
 #include <boost/log/utility/setup/file.hpp>
+#include <boost/process.hpp>
 
 namespace po = boost::program_options;
 namespace keywords = boost::log::keywords;
@@ -29,7 +30,6 @@ const char installDir[] = "_install";
 class Builder {
  public:
   int initBuild(int argc, char **argv);
-  static void initLogs();
   void startBuild();
  private:
   time_t timeout = 0;
