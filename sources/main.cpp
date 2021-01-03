@@ -18,13 +18,14 @@ int main(int argc, char *argv[]) {
 }*/
 
 #include <boost/process.hpp>
+#include <iostream>
 
-using namespace boost::process;
+namespace bp = boost::process;
 
 int main()
 {
-  ipstream pipe_stream;
-  child c("gcc --version", std_out > pipe_stream);
+  bp::ipstream pipe_stream;
+  bp::child c("gcc --version", bp::std_out > pipe_stream);
 
   std::string line;
 
