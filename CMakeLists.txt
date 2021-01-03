@@ -76,10 +76,10 @@ target_link_libraries(tests
         Boost::log
         Boost::filesystem
         template)
-target_link_libraries(builder
+target_link_libraries(builder PUBLIC
+        BoostProcess::boost_process
         Async++::Async++
         Boost::program_options
-        BoostProcess::boost_process
         Boost::thread
         Boost::log
         Boost::filesystem

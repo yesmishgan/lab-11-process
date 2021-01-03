@@ -46,6 +46,15 @@ void Builder::startBuild() {
   std::cout << "Build started!";
   auto my_task = async::spawn(std::bind(&timeCounter,
                                         std::ref(timeout)));
+  bp::ipstream pipe_stream;
+  bp::child c("gcc --version", bp::std_out > pipe_stream);
+
+  std::string line;
+
+  while (pipe_stream && std::getline(pipe_stream, line) && !line.empty())
+    std::cerr << line << std::endl;
+
+  c.wait();
   while (!my_task.ready()) {
     std::cout << "wait..." << std::endl;
     sleep(1);
