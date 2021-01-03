@@ -6,7 +6,6 @@
 #include <async++.h>
 #include <boost/process.hpp>
 #include <boost/program_options.hpp>
-#include <boost/process/child.hpp>
 #include <ctime>
 #include <string>
 #include <iostream>
@@ -20,6 +19,9 @@
 #include <boost/log/utility/setup/file.hpp>
 
 namespace po = boost::program_options;
+namespace keywords = boost::log::keywords;
+namespace sinks = boost::log::sinks;
+namespace bp = boost::process;
 
 const char buildDir[] = "_builds";
 const char installDir[] = "_install";
@@ -27,6 +29,7 @@ const char installDir[] = "_install";
 class Builder {
  public:
   int initBuild(int argc, char **argv);
+  static void initLogs();
   void startBuild();
  private:
   time_t timeout = 0;

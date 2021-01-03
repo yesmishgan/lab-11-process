@@ -42,8 +42,6 @@ int Builder::initBuild(int argc, char **argv) {
 }
 
 void Builder::startBuild() {
-  std::cout << "Pack: " << isPack << std::endl <<
-      "Config: " << buildConfig << std::endl;
   std::cout << "Build started!";
   auto my_task = async::spawn(std::bind(&timeCounter,
                                         std::ref(timeout)));
@@ -51,5 +49,24 @@ void Builder::startBuild() {
     std::cout << "wait..." << std::endl;
     sleep(1);
   }
+  bp::ipstream pipe_stream;
+  bp::child c("gcc --version", bp::std_out > pipe_stream);
   std::cout << "OK";
+}
+
+void Builder::initLogs() {
+  boost::log::add_common_attributes();
+  boost::log::add_console_log(
+      std::cout,
+      keywords::format = "[%TimeStamp%][%Severity%]: %Message%",
+      keywords::time_based_rotation =
+          sinks::file::rotation_at_time_point(0, 0, 0));
+  boost::log::add_file_log(
+      keywords::target = "logs/",
+      keywords::file_name = "%y%m%d_%3N.log",
+      keywords::rotation_size = 10 * 1024 * 1024,
+      keywords::scan_method = sinks::file::scan_matching,
+      keywords::time_based_rotation =
+          sinks::file::rotation_at_time_point(12, 0, 0),
+      keywords::format = "[%TimeStamp%][%Severity%]: %Message%");
 }
