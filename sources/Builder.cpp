@@ -5,7 +5,7 @@
 void timeCounter(time_t timeout){
   time_t start = time(nullptr);
   time_t end = time(nullptr);
-  while(end - start < timeout){
+  while (end - start < timeout){
     end = time(nullptr);
   }
   throw std::out_of_range("Time is ended");
@@ -42,7 +42,6 @@ int Builder::initBuild(int argc, char **argv) {
 }
 
 void Builder::startBuild() {
-
   std::cout << "Pack: " << isPack << std::endl <<
       "Config: " << buildConfig << std::endl;
   std::cout << "Build started!";
