@@ -19,14 +19,15 @@
 #include <boost/log/utility/setup/file.hpp>
 #include <boost/process.hpp>
 #include <utility>
+#include <memory>
 
 namespace po = boost::program_options;
 namespace keywords = boost::log::keywords;
 namespace sinks = boost::log::sinks;
 namespace bp = boost::process;
 
-const std::string buildDir = "_builds";
-const std::string installDir = "_install";
+const char buildDir[] = "_builds";
+const char installDir[] = "_install";
 
 class Builder {
  public:

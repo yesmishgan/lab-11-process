@@ -19,8 +19,8 @@ void timeCounter(const time_t& timeout, std::unique_ptr<bp::child>& process){
 const std::list<std::string> Builder::getArgs(int proc) {
   switch (proc) {
     case 0:
-      return {"-H.", "-B" + buildDir,
-              "-DCMAKE_INSTALL_PREFIX=" + installDir,
+      return {"-H.", "-B" + std::string(buildDir),
+              "-DCMAKE_INSTALL_PREFIX=" + std::string(installDir),
               "-DCMAKE_BUILD_TYPE=" + buildConfig};
     case 1:
       return {"--build", buildDir};
@@ -44,7 +44,7 @@ void Process(std::unique_ptr<bp::child>& process,
                 bp::args(args),
                 bp::std_out > pipe_stream});
 
-  for(std::string line;
+  for (std::string line;
        process->running() && std::getline(pipe_stream, line);)
     std::cout << line << std::endl;
   process->wait();
@@ -93,12 +93,12 @@ int Builder::startBuild() {
                                          getArgs(0),
                                          std::ref(errorComp)));
   my_task1.wait();
-  if(errorComp) return 1;
+  if (errorComp) return 1;
   auto my_task2 = my_task1.then(std::bind(&Process,
                                           std::ref(process),
                                           getArgs(1),
                                           std::ref(errorComp)));
-  if(errorComp) return 1;
+  if (errorComp) return 1;
   if (isInstall){
     my_task2 = my_task2.then(std::bind(&Process,
                                             std::ref(process),
