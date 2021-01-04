@@ -3,13 +3,52 @@
 #include "Builder.hpp"
 #include <boost/process.hpp>
 
-void timeCounter(time_t timeout){
+void timeCounter(const time_t& timeout, std::unique_ptr<bp::child>& process){
+  if (timeout <= 0){
+    return;
+  }
   time_t start = time(nullptr);
   time_t end = time(nullptr);
   while (end - start < timeout){
     end = time(nullptr);
   }
-  throw std::out_of_range("Time is ended");
+  std::cerr << "Time is ended!";
+  process->terminate();
+}
+
+const std::list<std::string> Builder::getArgs(int proc) {
+  switch (proc) {
+    case 0:
+      return {"-H.", "-B" + buildDir,
+              "-DCMAKE_INSTALL_PREFIX=" + installDir,
+              "-DCMAKE_BUILD_TYPE=" + buildConfig};
+    case 1:
+      return {"--build", buildDir};
+    case 2:
+      return {"--build", buildDir,
+              "--target", "install"};
+    case 3:
+      return {"--build", "_builds",
+              "--target", "package"};
+    default:
+      return {"--help"};
+  }
+}
+
+void Process(std::unique_ptr<bp::child>& process,
+             std::list<std::string>& args,
+             int& flag){
+  bp::ipstream pipe_stream;
+  process = std::make_unique<bp::child>(
+      bp::child{bp::search_path("cmake"),
+                bp::args(args),
+                bp::std_out > pipe_stream});
+
+  for(std::string line;
+       process->running() && std::getline(pipe_stream, line);)
+    std::cout << line << std::endl;
+  process->wait();
+  flag = process->exit_code();
 }
 
 int Builder::initBuild(int argc, char **argv) {
@@ -39,25 +78,40 @@ int Builder::initBuild(int argc, char **argv) {
   if (vm.count("pack")){
     isPack = true;
   }
+  if ((buildConfig != "Release") && (buildConfig != "Debug")){
+    throw std::invalid_argument("Build config is invalid!");
+  }
   return 0;
 }
 
-void Builder::startBuild() {
-  std::cout << "Build started!";
-  auto my_task = async::spawn(std::bind(&timeCounter,
-                                        std::ref(timeout)));
-  bp::ipstream pipe_stream;
-  bp::child c("gcc --version", bp::std_out > pipe_stream);
-
-  std::string line;
-
-  while (pipe_stream && std::getline(pipe_stream, line) && !line.empty())
-    std::cerr << line << std::endl;
-
-  c.wait();
-  while (!my_task.ready()) {
-    std::cout << "wait..." << std::endl;
-    sleep(1);
+int Builder::startBuild() {
+  auto timer = async::spawn(std::bind(&timeCounter,
+                                      std::ref(timeout),
+                                      std::ref(process)));
+  auto my_task1 = async::spawn(std::bind(&Process,
+                                         std::ref(process),
+                                         getArgs(0),
+                                         std::ref(errorComp)));
+  my_task1.wait();
+  if(errorComp) return 1;
+  auto my_task2 = my_task1.then(std::bind(&Process,
+                                          std::ref(process),
+                                          getArgs(1),
+                                          std::ref(errorComp)));
+  if(errorComp) return 1;
+  if (isInstall){
+    my_task2 = my_task2.then(std::bind(&Process,
+                                            std::ref(process),
+                                            getArgs(2),
+                                       std::ref(errorComp)));
   }
-  std::cout << "OK";
+  if (isPack){
+    my_task2 = my_task2.then(std::bind(&Process,
+                                            std::ref(process),
+                                            getArgs(3),
+                                       std::ref(errorComp)));
+  }
+  my_task2.wait();
+  timer.wait();
+  return 0;
 }

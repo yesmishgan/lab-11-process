@@ -11,7 +11,5 @@ int main(int argc, char *argv[]) {
   if (build.initBuild(argc, argv)){
     return EXIT_SUCCESS;
   }
-  build.startBuild();
-  std::cout << "TEST OUT";
-  return 0;
+  return build.startBuild();
 }
