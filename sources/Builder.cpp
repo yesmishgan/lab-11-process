@@ -38,6 +38,7 @@ const std::list<std::string> Builder::getArgs(int proc) {
 void Process(std::unique_ptr<bp::child>& process,
              std::list<std::string>& args,
              int& flag){
+  if (flag != 0) return;
   bp::ipstream pipe_stream;
   process = std::make_unique<bp::child>(
       bp::child{bp::search_path("cmake"),
@@ -93,12 +94,10 @@ int Builder::startBuild() {
                                          getArgs(0),
                                          std::ref(errorComp)));
   my_task1.wait();
-  if (errorComp) return 1;
   auto my_task2 = my_task1.then(std::bind(&Process,
                                           std::ref(process),
                                           getArgs(1),
                                           std::ref(errorComp)));
-  if (errorComp) return 1;
   if (isInstall){
     my_task2 = my_task2.then(std::bind(&Process,
                                             std::ref(process),

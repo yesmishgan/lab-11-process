@@ -9,21 +9,11 @@
 #include <list>
 #include <string>
 #include <iostream>
-#include <boost/log/core.hpp>
-#include <boost/log/expressions.hpp>
-#include <boost/log/sources/severity_logger.hpp>
-#include <boost/log/support/date_time.hpp>
-#include <boost/log/trivial.hpp>
-#include <boost/log/utility/setup/common_attributes.hpp>
-#include <boost/log/utility/setup/console.hpp>
-#include <boost/log/utility/setup/file.hpp>
 #include <boost/process.hpp>
 #include <utility>
 #include <memory>
 
 namespace po = boost::program_options;
-namespace keywords = boost::log::keywords;
-namespace sinks = boost::log::sinks;
 namespace bp = boost::process;
 
 const char buildDir[] = "_builds";
